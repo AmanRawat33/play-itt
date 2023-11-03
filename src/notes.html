@@ -35,3 +35,54 @@
     -firebase login #Log in to the firebase account
     -firebase init (and then select the project to host)#Initialize firebase and this creates firebase.json and .firebaserc 
     -firebase deploy
+
+-adding firebase authentication for sign in and sign up
+    -const auth is defined in firebase.js in utils as it is required in every api call we make so it is better to import it than to call it again and again.
+    -we used the email and password option in firebase to sign up and sign in user.
+
+-now, we need to store the user data in redux store to use it whenever we want once the user logs in and goes to the browse page.
+    -for this we need to install redux toolkit
+    -commands: 
+        -npm i -D @reduxjs/toolkit
+        -npm i react-redux
+
+-create appStore.js in utils to set up the store:
+    -const appStore = configureStore({
+        reducer: {}
+    });
+
+-now set up the user slice:
+    -create userSlice.js in utils.
+    -const userSlice = createSlice({
+        name: "user",
+        state: null,
+        reducers: {
+            addUser: (user, action) => {
+                return action.payload;
+            },
+            removeUser: (user, action) => {
+                return null;
+            }
+        }
+    })
+    export const {addUser, removeUser} = userSlice.actions;
+    export default userSlice.reducer
+
+    -now import userReducer in the appStore
+        -then set reducer as
+        reducer: {
+            user: userReducer;
+        }
+
+-Now we need to provide the store to our application.
+        -in app.js use the <Provider></Provider> after importing it.
+        -pass prop store={appStore} to the Provider.
+
+-now we need to add user once he logs in and remove him once he logs out.
+        -for this we'll use firebase onAuthStateChanged() at the root level, body or app.
+        -we want it to happen only once after the render so we use useEffect().
+        -inside useEffect we paste the function from firebase.
+        -we use dispatch to add/remove user. useDispatch();
+        -we use useNavigate to navigate the user to browse page once he logs in and home page when he logs out.
+        
+

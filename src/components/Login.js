@@ -1,9 +1,16 @@
 import { useState, useRef } from "react";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { updateProfile } from "firebase/auth";
+import { auth } from "../utils/firebase";
 import { isValidData } from "../utils/validate";
+import { useNavigate } from "react-router-dom";
 import Header from "./Header";
 const Login = () => {
   const [isSignIn, setIsSignIn] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
+  const navigate = useNavigate();
+  const name = useRef(null);
   const email = useRef(null);
   const password = useRef(null);
   const handleButtonClick = () => {
@@ -14,8 +21,46 @@ const Login = () => {
       }
       if (!isSignIn) {
         //   Sign up logic
+        createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
+          .then((userCredential) => {
+            // Signed up
+            const user = userCredential.user;
+            updateProfile(user, {
+              displayName: name.current.value
+            })
+              .then(() => {
+                // Profile updated!
+                navigate("/browse");
+              })
+              .catch((error) => {
+                // An error occurred
+                // ...
+              });
+            
+            // ...
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            setErrorMessage(errorCode + ": " + errorMessage);
+            // ..
+          });
       } else {
         //   Sign in logic
+        signInWithEmailAndPassword(auth, email.current.value, password.current.value)
+          .then((userCredential) => {
+            // Signed in
+            const user = userCredential.user;
+            console.log(user);
+            navigate("/browse");
+            // ...
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            setErrorMessage(errorCode + ": " + errorMessage)
+          });
+
       }
     };
   const handleUserClick = () => {
@@ -24,7 +69,7 @@ const Login = () => {
   return (
     <div>
       <Header />
-      <div className="absolute">
+      <div className="absolute w-screen">
         <img
           src="https://assets.nflxext.com/ffe/siteui/vlv3/ab4b0b22-2ddf-4d48-ae88-c201ae0267e2/0efe6360-4f6d-4b10-beb6-81e0762cfe81/IN-en-20231030-popsignuptwoweeks-perspective_alpha_website_medium.jpg"
           alt="login"
@@ -39,6 +84,7 @@ const Login = () => {
         </h1>
         {!isSignIn && (
           <input
+            ref={name}
             type="text"
             placeholder="Full Name"
             className="p-2 my-4 w-full rounded-md bg-gray-800"

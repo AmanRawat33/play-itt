@@ -14,3 +14,24 @@
 
 - sign up form using the same sign in form.
     -used useState to check if it is signin form or signup form and add/remove/edit input fields accordingly.
+
+- form validation using regex from web for email and password.
+    -used .test() method to check error in the entered input.
+    -used useRef() hook to read the entered input value.
+    -useState could have been used but useRef serves the purpose in a easier manner.
+    -ref={password} is added in the element in Login component.
+
+-firebase authentication 
+    -go to firebase.google.com and add a project with name
+    -enabled firebase hosting too.
+    -install firebase in project dir using npm.
+    -npm install firebase
+    -create config.js in utils for firebase configurations.
+    -copy firebase config from website and paste in firebase.js
+    -enable email/password sign from firebase website.
+
+-deploying on firebase:
+    -npm install -g firebase-tools #To setup firebase CLI
+    -firebase login #Log in to the firebase account
+    -firebase init (and then select the project to host)#Initialize firebase and this creates firebase.json and .firebaserc 
+    -firebase deploy

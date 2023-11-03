@@ -1,7 +1,23 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { isValidData } from "../utils/validate";
 import Header from "./Header";
 const Login = () => {
   const [isSignIn, setIsSignIn] = useState(true);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const email = useRef(null);
+  const password = useRef(null);
+  const handleButtonClick = () => {
+    const message = isValidData(email.current.value, password.current.value);
+      setErrorMessage(message);
+      if (message !== null) {
+          return;
+      }
+      if (!isSignIn) {
+        //   Sign up logic
+      } else {
+        //   Sign in logic
+      }
+    };
   const handleUserClick = () => {
     setIsSignIn(!isSignIn);
   };
@@ -14,35 +30,46 @@ const Login = () => {
           alt="login"
         />
       </div>
-      <form className="absolute bg-black w-3/12 my-48 mx-auto right-0 left-0 text-white p-12 bg-opacity-75 rounded-md">
+      <form
+        onSubmit={(e) => e.preventDefault()}
+        className="absolute bg-black w-3/12 my-48 mx-auto right-0 left-0 text-white p-12 bg-opacity-75 rounded-md"
+      >
         <h1 className="text-3xl font-bold my-4">
           {isSignIn ? "Sign in" : "Sign Up"}
         </h1>
-        {!isSignIn && <input
-          type="text"
-          placeholder="Full Name"
-          className="p-2 my-4 w-full rounded-md bg-gray-800"
-        />}
+        {!isSignIn && (
+          <input
+            type="text"
+            placeholder="Full Name"
+            className="p-2 my-4 w-full rounded-md bg-gray-800"
+          />
+        )}
         <input
+          ref={email}
           type="text"
           placeholder="Email address"
           className="p-2 my-4 w-full rounded-md bg-gray-800"
         />
         <input
+          ref={password}
           type="password"
           placeholder="Password"
           className="p-2 my-4 w-full rounded-md bg-gray-800"
         />
-        <button className="w-full bg-red-800 my-4 p-2 rounded-md">
-          {isSignIn? "Sign in" : "Sign up"}
+        <p className="text-sm text-red-900 font-bold" >{errorMessage}</p>
+        <button
+          className="w-full bg-red-800 my-4 p-2 rounded-md"
+          onClick={handleButtonClick}
+        >
+          {isSignIn ? "Sign in" : "Sign up"}
         </button>
         <p className="text-sm">
-          {isSignIn?"New user?": "Already registered?"}{" "}
+          {isSignIn ? "New user?" : "Already registered?"}{" "}
           <span
             className="font-bold cursor-pointer text-blue-600"
             onClick={handleUserClick}
           >
-            {isSignIn?"Sign Up" : "Sign in"}
+            {isSignIn ? "Sign Up" : "Sign in"}
           </span>
         </p>
       </form>

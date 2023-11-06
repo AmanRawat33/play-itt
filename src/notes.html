@@ -18,7 +18,7 @@
 - form validation using regex from web for email and password.
     -used .test() method to check error in the entered input.
     -used useRef() hook to read the entered input value.
-    -useState could have been used but useRef serves the purpose in a easier manner.
+    -useState could have been used but useRef serves the purpose in an easier manner.
     -ref={password} is added in the element in Login component.
 
 -firebase authentication 
@@ -26,7 +26,7 @@
     -enabled firebase hosting too.
     -install firebase in project dir using npm.
     -npm install firebase
-    -create config.js in utils for firebase configurations.
+    -create firebase.js in utils for firebase configurations.
     -copy firebase config from website and paste in firebase.js
     -enable email/password sign from firebase website.
 
@@ -86,3 +86,20 @@
         -we use useNavigate to navigate the user to browse page once he logs in and home page when he logs out.
         
 
+-bug fixes:
+        -if the user was signed in, if he changes the path to "/", then he goes to the sign in page,
+        asked to be sign in again.
+            -this should not happen as it does not happen in the netflix site.
+        -if the user is not signed in or signs out from the app, if he changes the path to "/browse",
+        he goes to the browse page which should not happen as the user is not logged in.
+        -Fixing the bug:
+            -use of firebase's onAuthStateChanged for navigation.
+            -we have used it in the body and wanted to navigate to the "/" or "/browse" but it was 
+            showing an error that cannot use navigate outside router.
+            -so we need to place the onAuthStateChanged in some component that is present in the app
+            always, so one such component is header.
+            -so we use header component for navigation.
+            -transfer onAuthStateChanged to header and only navigate from there.
+            -This fixes all the bugs and no need to navigate from anywhere else in the entire app.
+        -another issue: 
+            -unsubscribe the onAuthStateChanged callback.

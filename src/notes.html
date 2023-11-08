@@ -103,3 +103,22 @@
             -This fixes all the bugs and no need to navigate from anywhere else in the entire app.
         -another issue: 
             -unsubscribe the onAuthStateChanged callback.
+
+-Add constants.js in the utils to store links and other constants.
+-make an account of tmdb for movies api.
+-copy the constant part from the api docs in constants as API_OPTIONS and export 
+-make the api call in browse.js and make use of useEffect to make the api call using async await.
+
+-Since the component was looking messy, we made a custom hook.
+-A hook at the end of the day is just a fuction, so we create a util dir called repo and create custom hook
+called useNowPlayingMovies by pasting the code from here to there.
+-Then we create a movie slice to store the data in the redux store so that we can use it whenever we want
+and component doesn't have to maintain its own state.
+-we then add the actions and reducers to the movieSlice and then add it in the appStore.
+-we then move towards making the main container of the browse page.
+-important to use optional chaining when using APIs as I ran into a problem of reading null, as the data was
+not available when i was rendering it, the key of the movie.
+-then we make a function to get the movie data, its trailer and pass the trailer link to the 
+youtube embed. 
+-then we move the function into another hook called useMovieTrailer. 
+-this function also dispatches the trailer into the redux store.

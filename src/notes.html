@@ -122,3 +122,37 @@ not available when i was rendering it, the key of the movie.
 youtube embed. 
 -then we move the function into another hook called useMovieTrailer. 
 -this function also dispatches the trailer into the redux store.
+
+
+-creating the gpt search page
+        -first create a button in header which is visible only when user is logged in.
+        -then create an onclick function for that button.
+        -then create a gpt slice for that button, this is the third slice in the store.
+        -add reducers, actions.
+        -we call it gptSlice.js 
+        -in it we use createSlice to create a slice which takes an object as argument.
+        -this object contains name, initialState and reducers.
+        -reducers take actions and we define those actions.
+        -then export actions.
+
+        -this search page contains a search bar and moviesuggestion component.
+
+-searchbar:
+        -we create a form and use grid to adjust width of the input and button in the form. 
+        -we use BG_URL as the bg here also,
+
+
+-making the page multi-lingual:
+        -we creata a slice called configSlice to store app level settings.
+        -we create a slice by using create slice which accepts a reducer object.
+        -it contains name, iniitalState, and reducers.
+        -iniitalState is a object which contains initial state of the slice in a variable name.
+        -reducers has actions
+        -ex reducers: {
+            changeLanguage: (state, action) => {
+                state.lang = action.payload;
+            }
+        }
+        -we then export the action and reducer.
+        -export const {changeLanguage} = configSlice.actions;
+        -export default configSlice.reducer;

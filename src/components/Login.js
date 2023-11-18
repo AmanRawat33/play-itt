@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import Header from "./Header";
 import { addUser } from "../utils/userSlice";
+import { BG_URL } from "../utils/constants";
 const Login = () => {
   const [isSignIn, setIsSignIn] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -87,7 +88,7 @@ const Login = () => {
       <Header />
       <div className="absolute w-screen">
         <img
-          src="https://assets.nflxext.com/ffe/siteui/vlv3/ab4b0b22-2ddf-4d48-ae88-c201ae0267e2/0efe6360-4f6d-4b10-beb6-81e0762cfe81/IN-en-20231030-popsignuptwoweeks-perspective_alpha_website_medium.jpg"
+          src = {BG_URL}
           alt="login"
         />
       </div>

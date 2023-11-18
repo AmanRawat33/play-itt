@@ -6,7 +6,10 @@ import { useDispatch } from "react-redux";
 import { addUser, removeUser } from "../utils/userSlice";
 import { onAuthStateChanged } from "firebase/auth";
 import { useEffect } from "react";
-import {LOGO, AVATAR} from "../utils/constants"
+import { LOGO, AVATAR } from "../utils/constants";
+import { toggleGPTSearchView } from "../utils/gptSlice";
+import { SUPPORTED_LANGUAGES } from "./languageConstants";
+import { changeLanguage } from "../utils/configSlice";
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -38,25 +41,39 @@ const Header = () => {
     });
     return () => unsubscribe();
   }, []);
+  const showGptSearch = useSelector(store => store.gpt.showGptSearch);
+  const handleGptClick = () => {
+    dispatch(toggleGPTSearchView());
+  };
+    const handleLanguageChange = (e) => {
+      dispatch(changeLanguage(e.target.value));
+    };
   return (
     <div className="overflow-hidden">
       <div className="pl-6 py-2 bg-gradient-to-b from-black flex justify-between items-center w-screen absolute z-10">
-        <img
-          className="w-48 ml-0 p-0"
-          src={LOGO}
-          alt="logo"
-        />
+        <img className="w-48 m-0 p-0" src={LOGO} alt="logo" />
 
         {user && (
-          <div className="flex p-2">   
-            <img
-              className="w-12 h-12"
-              src={AVATAR}
-              alt="user-icon"
-            />
+          <div className="flex p-2 mr-5">
+            {showGptSearch && <select className="mr-2 p-2 bg-inherit backdrop-blur-sm text-white font-bold"
+            onClick={handleLanguageChange}>
+              {SUPPORTED_LANGUAGES.map((lang) => (
+                <option key={lang.identifier} value={lang.identifier}
+                className="text-black bg-gray-100">
+                  {lang.name}
+                </option>
+              ))}
+            </select>}
+            <button
+              className="py-2 px-4 text-white mr-5 font-bold bg-red-600 backdrop-blur-md rounded-md"
+              onClick={handleGptClick}
+            >
+              {showGptSearch? "Back to Netflix" : "GPT Search"}
+            </button>
+            <img className="w-12 h-12 rounded-md" src={AVATAR} alt="user-icon" />
             <button
               onClick={handleSignOut}
-              className="mx-1 bg-red-600 font-bold text-white p-2 rounded-sm"
+              className="ml-1 bg-red-600 font-bold text-white p-2 rounded-md"
             >
               Sign Out
             </button>

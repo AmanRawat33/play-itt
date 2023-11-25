@@ -50,7 +50,7 @@ const Header = () => {
     };
   return (
     <div className="overflow-hidden">
-      <div className="pl-6 py-2 bg-gradient-to-b from-black flex justify-between items-center w-screen absolute z-10">
+      <div className="pl-6 py-2 bg-gradient-to-b from-black flex flex-col md:flex-row justify-between items-center w-screen absolute z-10">
         <img className="w-48 m-0 p-0" src={LOGO} alt="logo" />
 
         {user && (

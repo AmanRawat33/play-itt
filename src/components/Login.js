@@ -90,11 +90,12 @@ const Login = () => {
         <img
           src = {BG_URL}
           alt="login"
+          className="h-screen object-cover md:w-screen"
         />
       </div>
       <form
         onSubmit={(e) => e.preventDefault()}
-        className="absolute bg-black w-3/12 my-48 mx-auto right-0 left-0 text-white p-12 bg-opacity-75 rounded-md"
+        className="absolute bg-black w-[90%] md:w-3/12 my-48 mx-auto right-0 left-0 text-white p-12 bg-opacity-75 rounded-md"
       >
         <h1 className="text-3xl font-bold my-4">
           {isSignIn ? "Sign in" : "Sign Up"}
@@ -117,7 +118,7 @@ const Login = () => {
           ref={password}
           type="password"
           placeholder="Password"
-          className="p-2 my-4 w-full rounded-md bg-gray-800"
+          className=" p-2 my-4 w-full rounded-md bg-gray-800"
         />
         <p className="text-sm text-red-900 font-bold">{errorMessage}</p>
         <button

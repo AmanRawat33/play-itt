@@ -6,13 +6,18 @@ const GptSearch = () => {
         -GPT Search Bar
         -GPT Movie suggestions */
   return (
-    <div>
+    <>
       <div className="fixed w-screen -z-[10]">
-        <img src={BG_URL} alt="background" />
+        <img  className="h-screen object-cover md:h-auto" src={BG_URL} alt="background" />
       </div>
-      <GptSearchBar />
-      <GptMovieSuggestions />
-    </div>
+      <div className="pt-[25%] md:pt-0">
+        <div className="mx-auto" >
+          <GptSearchBar />
+        </div>
+
+        <GptMovieSuggestions />
+      </div>
+    </>
   );
 };
 

@@ -1,0 +1,158 @@
+- Set up cra and tailwind
+    -for tailwind, refer to tailwind docs
+
+- Set up routing using react-router-dom
+    -used const appRouter and initialized with createWebRouter()
+    -createWebRouter has an array of paths
+    -added paths to different pages and routes
+    -provided the path to body using routerProvider and setting router to {appRouter}
+
+- sign in form using <form></form> tag
+    -no flex -used
+    -applied padding on form container tag and width full of each input and button 
+    -tailwind bg-opacity property used to make background image visible
+
+- sign up form using the same sign in form.
+    -used useState to check if it is signin form or signup form and add/remove/edit input fields accordingly.
+
+- form validation using regex from web for email and password.
+    -used .test() method to check error in the entered input.
+    -used useRef() hook to read the entered input value.
+    -useState could have been used but useRef serves the purpose in an easier manner.
+    -ref={password} is added in the element in Login component.
+
+-firebase authentication 
+    -go to firebase.google.com and add a project with name
+    -enabled firebase hosting too.
+    -install firebase in project dir using npm.
+    -npm install firebase
+    -create firebase.js in utils for firebase configurations.
+    -copy firebase config from website and paste in firebase.js
+    -enable email/password sign from firebase website.
+
+-deploying on firebase:
+    -npm install -g firebase-tools #To setup firebase CLI
+    -firebase login #Log in to the firebase account
+    -firebase init (and then select the project to host)#Initialize firebase and this creates firebase.json and .firebaserc 
+    -firebase deploy
+
+-adding firebase authentication for sign in and sign up
+    -const auth is defined in firebase.js in utils as it is required in every api call we make so it is better to import it than to call it again and again.
+    -we used the email and password option in firebase to sign up and sign in user.
+
+-now, we need to store the user data in redux store to use it whenever we want once the user logs in and goes to the browse page.
+    -for this we need to install redux toolkit
+    -commands: 
+        -npm i -D @reduxjs/toolkit
+        -npm i react-redux
+
+-create appStore.js in utils to set up the store:
+    -const appStore = configureStore({
+        reducer: {}
+    });
+
+-now set up the user slice:
+    -create userSlice.js in utils.
+    -const userSlice = createSlice({
+        name: "user",
+        state: null,
+        reducers: {
+            addUser: (user, action) => {
+                return action.payload;
+            },
+            removeUser: (user, action) => {
+                return null;
+            }
+        }
+    })
+    export const {addUser, removeUser} = userSlice.actions;
+    export default userSlice.reducer
+
+    -now import userReducer in the appStore
+        -then set reducer as
+        reducer: {
+            user: userReducer;
+        }
+
+-Now we need to provide the store to our application.
+        -in app.js use the <Provider></Provider> after importing it.
+        -pass prop store={appStore} to the Provider.
+
+-now we need to add user once he logs in and remove him once he logs out.
+        -for this we'll use firebase onAuthStateChanged() at the root level, body or app.
+        -we want it to happen only once after the render so we use useEffect().
+        -inside useEffect we paste the function from firebase.
+        -we use dispatch to add/remove user. useDispatch();
+        -we use useNavigate to navigate the user to browse page once he logs in and home page when he logs out.
+        
+
+-bug fixes:
+        -if the user was signed in, if he changes the path to "/", then he goes to the sign in page,
+        asked to be sign in again.
+            -this should not happen as it does not happen in the netflix site.
+        -if the user is not signed in or signs out from the app, if he changes the path to "/browse",
+        he goes to the browse page which should not happen as the user is not logged in.
+        -Fixing the bug:
+            -use of firebase's onAuthStateChanged for navigation.
+            -we have used it in the body and wanted to navigate to the "/" or "/browse" but it was 
+            showing an error that cannot use navigate outside router.
+            -so we need to place the onAuthStateChanged in some component that is present in the app
+            always, so one such component is header.
+            -so we use header component for navigation.
+            -transfer onAuthStateChanged to header and only navigate from there.
+            -This fixes all the bugs and no need to navigate from anywhere else in the entire app.
+        -another issue: 
+            -unsubscribe the onAuthStateChanged callback.
+
+-Add constants.js in the utils to store links and other constants.
+-make an account of tmdb for movies api.
+-copy the constant part from the api docs in constants as API_OPTIONS and export 
+-make the api call in browse.js and make use of useEffect to make the api call using async await.
+
+-Since the component was looking messy, we made a custom hook.
+-A hook at the end of the day is just a fuction, so we create a util dir called repo and create custom hook
+called useNowPlayingMovies by pasting the code from here to there.
+-Then we create a movie slice to store the data in the redux store so that we can use it whenever we want
+and component doesn't have to maintain its own state.
+-we then add the actions and reducers to the movieSlice and then add it in the appStore.
+-we then move towards making the main container of the browse page.
+-important to use optional chaining when using APIs as I ran into a problem of reading null, as the data was
+not available when i was rendering it, the key of the movie.
+-then we make a function to get the movie data, its trailer and pass the trailer link to the 
+youtube embed. 
+-then we move the function into another hook called useMovieTrailer. 
+-this function also dispatches the trailer into the redux store.
+
+
+-creating the gpt search page
+        -first create a button in header which is visible only when user is logged in.
+        -then create an onclick function for that button.
+        -then create a gpt slice for that button, this is the third slice in the store.
+        -add reducers, actions.
+        -we call it gptSlice.js 
+        -in it we use createSlice to create a slice which takes an object as argument.
+        -this object contains name, initialState and reducers.
+        -reducers take actions and we define those actions.
+        -then export actions.
+
+        -this search page contains a search bar and moviesuggestion component.
+
+-searchbar:
+        -we create a form and use grid to adjust width of the input and button in the form. 
+        -we use BG_URL as the bg here also,
+
+
+-making the gpt search page multi-lingual:
+        -we creata a slice called configSlice to store app level settings.
+        -we create a slice by using create slice which accepts a reducer object.
+        -it contains name, iniitalState, and reducers.
+        -iniitalState is a object which contains initial state of the slice in a variable name.
+        -reducers has actions
+        -ex reducers: {
+            changeLanguage: (state, action) => {
+                state.lang = action.payload;
+            }
+        }
+        -we then export the action and reducer.
+        -export const {changeLanguage} = configSlice.actions;
+        -export default configSlice.reducer;
